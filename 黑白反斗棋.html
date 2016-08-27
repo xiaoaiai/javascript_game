@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>黑白反斗棋</title>
+		<style type="text/css">
+			#hbqdiv{
+				width:auto;
+				height:auto;
+				border: solid 1px black;
+			}
+			#mx{
+				width:600px;
+				height:30px;
+				border: solid 1px black;
+				background-color: limegreen;
+				float:right; 
+				display: none;
+ 			}
+			#cx{
+				width:0px;
+				height:30px;
+				background-color: white;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="mx">
+			<div id="cx"></div>
+		</div>
+		<br />
+		<center>
+			<h1>黑白反斗棋</h1>
+			选择关卡：
+			<select id="selectid" onchange="createqp()">
+				<option name="num" value="1">1</option>
+				<option name="num" value="2">2</option>
+				<option name="num" value="3">3</option>
+				<option name="num" value="4">4</option>
+				<option name="num" value="5">5</option>
+				<option name="num" value="6">6</option>
+				<option name="num" value="7">7</option>
+				<option name="num" value="8">8</option>
+			</select>&nbsp;&nbsp;
+			<input type="button" id="startid" onclick="createqp()" value="开始游戏"/>
+			<br/><br/><hr />
+			<div id="hbqdiv"></div>
+		</center>
+		<ol>
+			<li>点击每一个方格，其本身与相邻的方格的颜色都发生改变</li>
+			<li>当所有方格的颜色全部变为白色时，赢得关卡胜利</li>
+			<li>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</li>
+			<li>YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY</li>
+		</ol>
+	</body>
+	<script>
+		//产生游戏界面
+		function createqp(){
+			cxlen=0;
+			document.getElementById("mx").style.backgroundColor="limegreen";
+			document.getElementById("cx").style.width="0px";
+			if(document.getElementById("tableid")!=null){
+				document.getElementById("tableid").remove();
+			}
+			var div=document.getElementById("hbqdiv");
+			var count=window.parseInt(document.getElementById("selectid").value);
+			var table=document.createElement("table");
+			table.id="tableid";
+			table.border="1px";
+			for(var i=0;i<count;i++){
+				var row=table.insertRow();
+				for(var j=0;j<count;j++){
+					var cell=row.insertCell();
+					cell.style.width="50px";
+					cell.style.height="50px";
+					cell.style.backgroundColor="black";
+					cell.id=i+","+j;
+					cell.onclick=cellclick;
+				}
+			}
+			div.appendChild(table);
+			showmx();
+			changelife();
+		}
+		//点击单元格
+		function cellclick(){
+			var target=event.srcElement;
+			//alert(target.id);
+			var cellid=target.id;
+			var dates=cellid.split(",");
+			var x=window.parseInt(dates[0]);
+			var y=window.parseInt(dates[1]);
+			var up=x+","+(y+1);
+			var down=x+","+(y-1);
+			var left=(x-1)+","+y;
+			var right=(x+1)+","+y;
+			changcolor(cellid);
+			changcolor(up);
+			changcolor(down);
+			changcolor(left);
+			changcolor(right);
+			var result=ispath();
+			if(result==true){
+				var choice=confirm("恭喜您通过了本关，是否进行下一关的挑战？");
+				if(choice==true){
+					var select=document.getElementById("selectid");
+					select.selectedIndex++;
+					cxlen=0;
+					document.getElementById("mx").style.backgroundColor="limegreen";
+					document.getElementById("cx").style.width="0px";
+					createqp();
+				}
+			}
+		}
+		//改变单元格颜色
+		function changcolor(cellid){
+			try{
+				if(document.getElementById(cellid).style.backgroundColor=="black"){
+					document.getElementById(cellid).style.backgroundColor="white";
+				}else{
+					document.getElementById(cellid).style.backgroundColor="black";
+				}
+			}catch(e){
+				
+			}
+		}
+		//判断是否通关
+		function ispath(){
+			var result=true;
+			var table=document.getElementById("tableid");
+			var rows=table.rows;
+			for(var i=0;i<rows.length;i++){
+				var row=rows[i];
+				var cells=row.cells;
+				for(var j=0;j<cells.length;j++){
+					var cell=cells[j];
+					if(cell.style.backgroundColor=="black"){
+						result=false;
+					}
+				}
+			}
+			return result;
+		}
+		//显示mx状态
+		function showmx(){
+			document.getElementById("mx").style.display="block";
+		}
+		//生命值改变
+		var cxlen=0;
+		var mxlen=600;
+		function changelife(){
+			document.getElementById("cx").style.width=cxlen+"px";
+			cxlen++;
+			if(cxlen<mxlen){
+				if(cxlen>510){
+					document.getElementById("mx").style.backgroundColor="red";
+				}
+				 setTimeout(changelife,100);
+			}
+			islifeout();
+		}
+		//生命值判断输赢
+		function islifeout(){
+			if(cxlen==600){
+				var choice=confirm("GAME OVER!是否重新挑战本关？");
+				if(choice==true){
+					cxlen=0;
+					document.getElementById("mx").style.backgroundColor="limegreen";
+					document.getElementById("cx").style.width="0px";
+					createqp();
+				}
+			}
+		}
+	</script>
+</html>

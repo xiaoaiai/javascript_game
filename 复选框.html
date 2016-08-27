@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			select{
+				width:300px;
+				height:350px
+			}
+			input{
+				width: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<td>
+					<select id="selone" size="10"></select>
+				</td>
+				<td>
+					<input type="button" value="给第一个赋值" onclick="putin()"/><br />
+					<input type="button" value=">>" onclick="toright()" /><br />
+					<input type="button" value="<<" onclick="toleft()"/><br />
+					<input type="button" value="清空右边的值" onclick="clearall()" /><br />
+				</td>
+				<td>
+					<select id="seltwo" size="10"></select>
+				</td>
+			</tr>
+		</table>
+	</body>
+	<script>
+		function putin(){
+			var selone=document.getElementById("selone");
+			for(var i=1;i<=20;i++){
+				var opt=new Option(i,i);
+				selone.appendChild(opt);
+			}
+		}
+		function toright(){
+			var selone=$("selone");
+			var seltwo=$("seltwo");
+			//alert(selone.selectedIndex);
+			var opt=selone.options[selone.selectedIndex];
+			seltwo.appendChild(opt);
+		}
+		function toleft(){
+			var selone=$('selone');
+			var seltwo=$('seltwo');
+			var opt=seltwo.options[seltwo.selectedIndex];
+			selone.appendChild(opt);
+		}
+		function clearall(){
+			var seltwo=$("seltwo");
+			var opts=seltwo.childNodes;
+			var optlen=opts.length;
+			for(var i=0;i<optlen;i++){
+				seltwo.removeChild(opts[0]);
+			}
+		}
+		function $(objid){
+			return document.getElementById(objid);
+		}
+	</script>
+</html>

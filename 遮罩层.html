@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.shadow{
+				top:0px;
+				left:0px;
+				right:0px;
+				bottom:0px;
+				position:absolute;
+				background-color: rgba(100,100,100,0.4);
+			}
+		</style>
+	</head>
+	<body>
+		<input type="button" value="产生遮罩层" onclick="shadow()"/>
+	</body>
+	<script>
+		//产生遮罩层
+		function shadow(){
+			var div=document.createElement("div");
+			div.style.width=document.body.clientWidth+30+"px";
+			div.style.height=document.body.scrollHeight+15+"px";
+			div.className="shadow";
+			document.body.appendChild(div);
+		}
+	</script>
+</html>
